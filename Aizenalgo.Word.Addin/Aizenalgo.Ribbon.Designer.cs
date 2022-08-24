@@ -38,6 +38,7 @@
             this.grpDocuzen = this.Factory.CreateRibbonGroup();
             this.btnSubmit = this.Factory.CreateRibbonButton();
             this.btnSave = this.Factory.CreateRibbonButton();
+            this.btnLogout = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.grpDocuzen.SuspendLayout();
             this.SuspendLayout();
@@ -53,6 +54,7 @@
             // 
             this.grpDocuzen.Items.Add(this.btnSubmit);
             this.grpDocuzen.Items.Add(this.btnSave);
+            this.grpDocuzen.Items.Add(this.btnLogout);
             this.grpDocuzen.Label = "Docuzen";
             this.grpDocuzen.Name = "grpDocuzen";
             // 
@@ -70,6 +72,13 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.ShowImage = true;
             this.btnSave.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSave_Click);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.Label = "Logout";
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.ShowImage = true;
+            this.btnLogout.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnLogout_Click);
             // 
             // Aizenalgo
             // 
@@ -91,6 +100,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpDocuzen;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSubmit;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSave;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnLogout;
     }
 
     partial class ThisRibbonCollection
