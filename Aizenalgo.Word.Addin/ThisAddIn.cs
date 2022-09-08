@@ -8,12 +8,18 @@ using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Word;
 using Microsoft.Office.Core;
 using Microsoft.Office.Tools.Ribbon;
+using Microsoft.Office.Interop.Word;
+using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace Aizenalgo.Word.Addin
 {
     public partial class ThisAddIn
     {
 
+        public LoginControlHost LoginControl;
+        public Microsoft.Office.Tools.CustomTaskPane LoginTaskPane;
+        public bool IsUserLoggedIn { get; set; }
         private static readonly log4net.ILog log =
                         log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public bool IsActiveDocDocuzen { get; set; }
@@ -22,13 +28,32 @@ namespace Aizenalgo.Word.Addin
         public Dictionary<string,DocuzenDocument> DocuzenDocList { get; set; }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            log.Info("Docuzen Add-in loading.");
-            Globals.ThisAddIn.Application.DocumentOpen += Application_DocumentOpen;
-            Globals.ThisAddIn.Application.WindowActivate += Application_WindowActivate;
-            DocuzenDocList = new Dictionary<string, DocuzenDocument>();
-            log.Info("Docuzen Add-in loaded successfully.");
+            Task.Run(() => {
+                log.Info("Docuzen Add-in loading.");
+                Globals.ThisAddIn.Application.DocumentOpen += Application_DocumentOpen;
+                //Globals.ThisAddIn.Application. += Application_DocumentOpen;
+                //Globals.ThisAddIn.Application.WindowActivate += Application_WindowActivate;
+                DocuzenDocList = new Dictionary<string, DocuzenDocument>();
+                log.Info("Docuzen Add-in loaded successfully.");
+                UpdateButtonLabel();
+            } );        
+          
+
         }
 
+        public void UpdateButtonLabel()
+        {
+            RibbonButton btn = DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Items.FirstOrDefault(s => s.Name == "btnLogout") as RibbonButton;
+            if (btn != null)
+            {
+                btn.Label = IsUserLoggedIn ? "Logout" : "Login";
+            }
+            RibbonButton btnsubmit = DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Items.FirstOrDefault(s => s.Name == "btnSubmit") as RibbonButton;
+            RibbonButton btnsave = DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Items.FirstOrDefault(s => s.Name == "btnSave") as RibbonButton;
+
+            btnsave.Enabled = IsUserLoggedIn;
+            btnsubmit.Enabled = IsUserLoggedIn;
+        }
         private void Application_WindowActivate(Microsoft.Office.Interop.Word.Document Doc, Microsoft.Office.Interop.Word.Window Wn)
         {
             log.Info($"Docuzen Add-in:{Doc.Name} document activated.");
@@ -39,6 +64,9 @@ namespace Aizenalgo.Word.Addin
                     IsActiveDocDocuzen = true;
                     DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Visible = true;
                     log.Info($"Docuzen Add-in:{Doc.Name} is a docuzen document.");
+
+                    //Enable Signin button
+                    UpdateButtonLabel();
                 }
                 else
                 {
@@ -63,11 +91,11 @@ namespace Aizenalgo.Word.Addin
                 Microsoft.Office.Core.DocumentProperties properties;
                 properties = (Office.DocumentProperties)Doc.CustomDocumentProperties;
 
-                var docId = ReadDocumentProperty(Doc, "DocumentId");
+                var docId = ReadDocumentProperty(Doc, "DVId");
                 if (docId != null)
                 {
-                    var sessionId = ReadDocumentProperty(Doc, "DocumentId");
-                    var userId = ReadDocumentProperty(Doc, "DocumentId");
+                    var sessionId = ReadDocumentProperty(Doc, "SToken");
+                    var userId = ReadDocumentProperty(Doc, "Uid");
                     docuzendoc.SessionId = sessionId;
                     docuzendoc.UserId = userId;
                     docuzendoc.DocumentId = docId;
@@ -77,7 +105,7 @@ namespace Aizenalgo.Word.Addin
             catch (Exception ex)
             {
                 log.Error($"Docuzen Add-in:Failed while reading docuzen properties in {Doc.Name}.", ex);
-                throw;
+                //throw;
             }
             
         }

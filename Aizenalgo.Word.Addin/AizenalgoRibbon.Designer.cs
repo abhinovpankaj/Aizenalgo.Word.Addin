@@ -1,13 +1,13 @@
 ﻿namespace Aizenalgo.Word.Addin
 {
-    partial class Aizenalgo : Microsoft.Office.Tools.Ribbon.RibbonBase
+    partial class AizenalgoRibbon : Microsoft.Office.Tools.Ribbon.RibbonBase
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        public Aizenalgo()
+        public AizenalgoRibbon()
             : base(Globals.Factory.GetRibbonFactory())
         {
             InitializeComponent();
@@ -63,26 +63,30 @@
             this.btnSubmit.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.btnSubmit.Label = "Submit";
             this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.OfficeImageId = "SendUpdate";
             this.btnSubmit.ShowImage = true;
+            this.btnSubmit.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSubmit_Click);
             // 
             // btnSave
             // 
             this.btnSave.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.btnSave.Label = "Save";
             this.btnSave.Name = "btnSave";
+            this.btnSave.OfficeImageId = "FileSave";
             this.btnSave.ShowImage = true;
             this.btnSave.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSave_Click);
             // 
             // btnLogout
             // 
-            this.btnLogout.Label = "Logout";
+            this.btnLogout.Label = "Login";
             this.btnLogout.Name = "btnLogout";
+            this.btnLogout.OfficeImageId = "AccountMenu";
             this.btnLogout.ShowImage = true;
             this.btnLogout.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnLogout_Click);
             // 
-            // Aizenalgo
+            // AizenalgoRibbon
             // 
-            this.Name = "Aizenalgo";
+            this.Name = "AizenalgoRibbon";
             this.RibbonType = "Microsoft.Word.Document";
             this.Tabs.Add(this.tab1);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Aizenalgo_Load);
@@ -105,9 +109,9 @@
 
     partial class ThisRibbonCollection
     {
-        internal Aizenalgo Aizenalgo
+        internal AizenalgoRibbon Aizenalgo
         {
-            get { return this.GetRibbon<Aizenalgo>(); }
+            get { return this.GetRibbon<AizenalgoRibbon>(); }
         }
     }
 }
