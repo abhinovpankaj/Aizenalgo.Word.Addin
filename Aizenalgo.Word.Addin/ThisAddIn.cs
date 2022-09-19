@@ -19,7 +19,19 @@ namespace Aizenalgo.Word.Addin
 
         public LoginControlHost LoginControl;
         public Microsoft.Office.Tools.CustomTaskPane LoginTaskPane;
-        public bool IsUserLoggedIn { get; set; }
+        private bool _isUserloggedIn;
+        public bool IsUserLoggedIn
+        { 
+            get { return _isUserloggedIn; }
+            set 
+            {
+                if (value==false)
+                {
+                    ShowLoginWindow();
+                }
+                _isUserloggedIn = value;
+            }
+        }
         private static readonly log4net.ILog log =
                         log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public bool IsActiveDocDocuzen { get; set; }
@@ -35,24 +47,24 @@ namespace Aizenalgo.Word.Addin
                 //Globals.ThisAddIn.Application.WindowActivate += Application_WindowActivate;
                 DocuzenDocList = new Dictionary<string, DocuzenDocument>();
                 log.Info("Docuzen Add-in loaded successfully.");
-                UpdateButtonLabel();
-            } );        
-          
+                UpdateButtonState();
+            } );
+           
 
         }
 
-        public void UpdateButtonLabel()
+        public void UpdateButtonState()
         {
-            RibbonButton btn = DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Items.FirstOrDefault(s => s.Name == "btnLogout") as RibbonButton;
-            if (btn != null)
-            {
-                btn.Label = IsUserLoggedIn ? "Logout" : "Login";
-            }
+            //RibbonButton btn = DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Items.FirstOrDefault(s => s.Name == "btnLogout") as RibbonButton;
+            //if (btn != null)
+            //{
+            //    btn.Label = IsUserLoggedIn ? "Logout" : "Login";
+            //}
             RibbonButton btnsubmit = DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Items.FirstOrDefault(s => s.Name == "btnSubmit") as RibbonButton;
             RibbonButton btnsave = DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Items.FirstOrDefault(s => s.Name == "btnSave") as RibbonButton;
 
-            btnsave.Enabled = IsUserLoggedIn;
-            btnsubmit.Enabled = IsUserLoggedIn;
+            btnsave.Enabled = IsActiveDocDocuzen;
+            btnsubmit.Enabled = IsActiveDocDocuzen;
         }
         private void Application_WindowActivate(Microsoft.Office.Interop.Word.Document Doc, Microsoft.Office.Interop.Word.Window Wn)
         {
@@ -66,7 +78,7 @@ namespace Aizenalgo.Word.Addin
                     log.Info($"Docuzen Add-in:{Doc.Name} is a docuzen document.");
 
                     //Enable Signin button
-                    UpdateButtonLabel();
+                    UpdateButtonState();
                 }
                 else
                 {
@@ -99,15 +111,22 @@ namespace Aizenalgo.Word.Addin
                     docuzendoc.SessionId = sessionId;
                     docuzendoc.UserId = userId;
                     docuzendoc.DocumentId = docId;
+                    if (DocuzenDocList.ContainsKey(Doc.Name))
+                    {
+                        DocuzenDocList.Remove(Doc.Name);
+                    }
                     DocuzenDocList.Add(Doc.Name, docuzendoc);
+                    IsActiveDocDocuzen = true;
                 }
+                else
+                    IsActiveDocDocuzen = false;
             }
             catch (Exception ex)
             {
                 log.Error($"Docuzen Add-in:Failed while reading docuzen properties in {Doc.Name}.", ex);
                 //throw;
             }
-            
+            UpdateButtonState();
         }
         private string ReadDocumentProperty(Microsoft.Office.Interop.Word.Document Doc,string propertyName)
         {
@@ -123,7 +142,13 @@ namespace Aizenalgo.Word.Addin
             }
             return null;
         }
-        private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
+
+        public void ShowLoginWindow()
+        {
+            LoginControl control = new LoginControl();
+            control.ShowDialog();
+        }
+            private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
 
         }
