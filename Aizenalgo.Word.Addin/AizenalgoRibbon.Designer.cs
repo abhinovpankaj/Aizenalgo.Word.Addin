@@ -34,20 +34,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tab1 = this.Factory.CreateRibbonTab();
+            this.docuzenTab = this.Factory.CreateRibbonTab();
             this.grpDocuzen = this.Factory.CreateRibbonGroup();
             this.btnSubmit = this.Factory.CreateRibbonButton();
             this.btnSave = this.Factory.CreateRibbonButton();
-            this.tab1.SuspendLayout();
+            this.docuzenTab.SuspendLayout();
             this.grpDocuzen.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tab1
+            // docuzenTab
             // 
-            this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
-            this.tab1.Groups.Add(this.grpDocuzen);
-            this.tab1.Label = "TabAddIns";
-            this.tab1.Name = "tab1";
+            this.docuzenTab.Groups.Add(this.grpDocuzen);
+            this.docuzenTab.Label = "Docuzen";
+            this.docuzenTab.Name = "docuzenTab";
             // 
             // grpDocuzen
             // 
@@ -78,10 +77,10 @@
             // 
             this.Name = "AizenalgoRibbon";
             this.RibbonType = "Microsoft.Word.Document";
-            this.Tabs.Add(this.tab1);
+            this.Tabs.Add(this.docuzenTab);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Aizenalgo_Load);
-            this.tab1.ResumeLayout(false);
-            this.tab1.PerformLayout();
+            this.docuzenTab.ResumeLayout(false);
+            this.docuzenTab.PerformLayout();
             this.grpDocuzen.ResumeLayout(false);
             this.grpDocuzen.PerformLayout();
             this.ResumeLayout(false);
@@ -90,7 +89,7 @@
 
         #endregion
 
-        internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonTab docuzenTab;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpDocuzen;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSubmit;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSave;

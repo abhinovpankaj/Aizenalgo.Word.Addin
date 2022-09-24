@@ -12,13 +12,13 @@ namespace Aizenalgo.Word.Addin
     public class DocuzenService
     {
         const string AUTHENTICATIONBASEURL = "http://demo.aizenalgo.com:9016/api/WordProc/WordProcAuthentication";
-        const string VERIFICATIONBASEURL = "http://demo.aizenalgo.com:9016/api/WordProcSessionVerification/WordProcSessionVerification";
+        const string VERIFICATIONBASEURL = "http://demo.aizenalgo.com:9016/api/WordProc/WordProcSessionDetails";
         static HttpClient client = new HttpClient();
 
-        public static async Task<ServiceResponse> DocuzenSessionVerification(string sessionId, string docId,string filePath, string fileName)
+        public static async Task<ServiceResponse> DocuzenSessionVerification(string sessionId, string docId,string filePath, string fileName,int type)
         {
             ServiceResponse verificationResponse = null;
-            string endpoint = $"{VERIFICATIONBASEURL}?SessionId={sessionId}&DocID={docId}";
+            string endpoint = $"{VERIFICATIONBASEURL}?SessionId={sessionId}&DocID={docId}&Mode={type}";
             //endpoint = "http://demo.aizenalgo.com:9016/api/WordProcSessionVerification/WordProcSessionVerification?SessionId=3423sdfdsf45dfvfg332&DocID=3456";
 
             using (var formData = new MultipartFormDataContent())
@@ -38,11 +38,11 @@ namespace Aizenalgo.Word.Addin
             return verificationResponse;
         }
 
-        public static async Task<ServiceResponse> DocuzenAuthentication(string userName, string password,string sessionId, string docId, string filePath, string fileName)
+        public static async Task<ServiceResponse> DocuzenAuthentication(string userName, string password,string sessionId, string docId, string filePath, string fileName,int type)
         {
             ServiceResponse verificationResponse = null;
             string endPoint = $"{AUTHENTICATIONBASEURL}?UserName={userName}&" +
-                $"Password={password}&SessionId={sessionId}&DocID={docId}";
+                $"Password={password}&SessionId={sessionId}&DocID={docId}&Mode={type}";
             //endPoint = "http://demo.aizenalgo.com:9016/api/WordProc/WordProcAuthentication?UserName=Admin1&Password=Aizant@123&SessionId=123&DocID=1";
             
             using (var formData = new MultipartFormDataContent())

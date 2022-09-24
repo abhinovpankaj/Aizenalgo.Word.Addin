@@ -35,7 +35,7 @@ namespace Aizenalgo.Word.Addin
         private static readonly log4net.ILog log =
                         log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public bool IsActiveDocDocuzen { get; set; }
-
+        public int Mode { get; set; }
         public OfficeRibbon DocuzenRibbon { get; set; }
         public Dictionary<string,DocuzenDocument> DocuzenDocList { get; set; }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
@@ -43,8 +43,9 @@ namespace Aizenalgo.Word.Addin
             Task.Run(() => {
                 log.Info("Docuzen Add-in loading.");
                 Globals.ThisAddIn.Application.DocumentOpen += Application_DocumentOpen;
-                //Globals.ThisAddIn.Application. += Application_DocumentOpen;
-                //Globals.ThisAddIn.Application.WindowActivate += Application_WindowActivate;
+                
+               
+                Globals.ThisAddIn.Application.WindowActivate += Application_WindowActivate;
                 DocuzenDocList = new Dictionary<string, DocuzenDocument>();
                 log.Info("Docuzen Add-in loaded successfully.");
                 UpdateButtonState();
@@ -84,7 +85,7 @@ namespace Aizenalgo.Word.Addin
                 {
                     IsActiveDocDocuzen = false;
                     DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Visible = false;
-                    log.Info($"Docuzen Add-in:{Doc.Name} is a nn-docuzen document. Docuzen group will be hidden");
+                    log.Info($"Docuzen Add-in:{Doc.Name} is a non-docuzen document. Docuzen group will be hidden");
                 }
             }
             catch (Exception ex)
@@ -108,9 +109,11 @@ namespace Aizenalgo.Word.Addin
                 {
                     var sessionId = ReadDocumentProperty(Doc, "SToken");
                     var userId = ReadDocumentProperty(Doc, "Uid");
+                    var logoURL = ReadDocumentProperty(Doc, "logou");
                     docuzendoc.SessionId = sessionId;
                     docuzendoc.UserId = userId;
                     docuzendoc.DocumentId = docId;
+                    docuzendoc.LogoURL = logoURL;
                     if (DocuzenDocList.ContainsKey(Doc.Name))
                     {
                         DocuzenDocList.Remove(Doc.Name);

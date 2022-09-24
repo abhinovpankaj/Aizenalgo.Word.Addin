@@ -11,5 +11,7 @@ namespace Aizenalgo.Word.Addin
         public string DocumentId { get; set; }
         public string SessionId { get; set; }
         public string UserId { get; set; }
+
+        public string LogoURL { get; set; }
     }
 }

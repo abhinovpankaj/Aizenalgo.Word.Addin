@@ -26,11 +26,15 @@ namespace Aizenalgo.Word.Addin
         public LoginControl()
         {
             InitializeComponent();
+            string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
+            var activeDocuzen = Globals.ThisAddIn.DocuzenDocList[activeDocName];
+            logo.Source =  new BitmapImage(new Uri(activeDocuzen.LogoURL)); 
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             //call service and login
+            int mode = Globals.ThisAddIn.Mode;
             string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
             string tempPath = System.IO.Path.GetTempPath();
             string fPath = System.IO.Path.Combine(tempPath, activeDocName);
@@ -42,7 +46,7 @@ namespace Aizenalgo.Word.Addin
             if (activeDocuzen!=null)
             {
                 log.Info("Docuzen doc found.");
-                ServiceResponse response = await DocuzenService.DocuzenAuthentication(userName, password, activeDocuzen.SessionId, activeDocuzen.DocumentId,fPath , activeDocName);
+                ServiceResponse response = await DocuzenService.DocuzenAuthentication(userName, password, activeDocuzen.SessionId, activeDocuzen.DocumentId,fPath , activeDocName,mode);
                 if (response.MsgType == "Success")
                 {
                     //close the pane.

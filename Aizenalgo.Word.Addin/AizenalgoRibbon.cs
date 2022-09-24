@@ -18,14 +18,62 @@ namespace Aizenalgo.Word.Addin
             Globals.ThisAddIn.DocuzenRibbon = sender as OfficeRibbon;
         }
 
-        private void btnSave_Click(object sender, RibbonControlEventArgs e)
+        private async void btnSave_Click(object sender, RibbonControlEventArgs e)
         {
+            Globals.ThisAddIn.Mode = 1;
+            string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
+            var activeDocuzen = Globals.ThisAddIn.DocuzenDocList[activeDocName];
+            string tempPath = System.IO.Path.GetTempPath();
+            string fPath = Path.Combine(tempPath, activeDocName);
+            File.Copy(Path.Combine(Globals.ThisAddIn.Application.ActiveDocument.Path, activeDocName), fPath, true);
 
+            log.Info("Submit button Clicked");
+            if (activeDocuzen != null)
+            {
+                log.Info("Docuzen doc found.");
+                await Dispatcher.CurrentDispatcher.Invoke(async () =>
+                {
+                    ServiceResponse response = await DocuzenService.DocuzenSessionVerification(activeDocuzen.SessionId, activeDocuzen.DocumentId, fPath, activeDocName,1);
+                    if (response != null)
+                    {
+                        if (response.MsgType == "Success")
+                        {
+                            //close the pane.
+
+                            log.Info("Session verified successfully.Submssion will start.");
+                        }
+                        else
+                        {
+                            // Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
+                            Globals.ThisAddIn.IsUserLoggedIn = false;
+                            //Globals.ThisAddIn.ShowLoginWindow();
+
+                            log.Info("Log-in failed.");
+                        }
+                    }
+                    else
+                    {
+                        //Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
+                        //Globals.ThisAddIn.ShowLoginWindow();
+                        Globals.ThisAddIn.IsUserLoggedIn = false;
+                        log.Info("Log-in failed.");
+                    }
+                });
+
+
+            }
+            else
+            {
+                //log
+                log.Info("No Docuzen doc found in dictionary.");
+            }
+            Globals.ThisAddIn.UpdateButtonState();
         }
 
         [STAThread]
         private async void btnSubmit_Click(object sender, RibbonControlEventArgs e)
         {
+            Globals.ThisAddIn.Mode = 2;
             //call service
             string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
             var activeDocuzen = Globals.ThisAddIn.DocuzenDocList[activeDocName];
@@ -39,7 +87,7 @@ namespace Aizenalgo.Word.Addin
                 log.Info("Docuzen doc found.");
                 await Dispatcher.CurrentDispatcher.Invoke(async () =>
                 {
-                    ServiceResponse response = await DocuzenService.DocuzenSessionVerification(activeDocuzen.SessionId, activeDocuzen.DocumentId, fPath, activeDocName);
+                    ServiceResponse response = await DocuzenService.DocuzenSessionVerification(activeDocuzen.SessionId, activeDocuzen.DocumentId, fPath, activeDocName,2);
                     if (response != null)
                     {
                         if (response.MsgType == "Success")
