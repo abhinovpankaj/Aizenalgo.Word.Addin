@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace Aizenalgo.Word.Addin
@@ -20,6 +21,7 @@ namespace Aizenalgo.Word.Addin
 
         private async void btnSave_Click(object sender, RibbonControlEventArgs e)
         {
+            Globals.ThisAddIn.Application.StatusBar = "Saving to Aizenalgo server...";
             Globals.ThisAddIn.Mode = 1;
             string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
             var activeDocuzen = Globals.ThisAddIn.DocuzenDocList[activeDocName];
@@ -39,7 +41,7 @@ namespace Aizenalgo.Word.Addin
                         if (response.MsgType == "Success")
                         {
                             //close the pane.
-
+                            MessageBox.Show("Document Saved successfully");
                             log.Info("Session verified successfully.Submssion will start.");
                         }
                         else
@@ -68,11 +70,13 @@ namespace Aizenalgo.Word.Addin
                 log.Info("No Docuzen doc found in dictionary.");
             }
             Globals.ThisAddIn.UpdateButtonState();
+            Globals.ThisAddIn.Application.StatusBar = "";
         }
 
         [STAThread]
         private async void btnSubmit_Click(object sender, RibbonControlEventArgs e)
         {
+            Globals.ThisAddIn.Application.StatusBar = "Submitting to Aizenalgo server...";
             Globals.ThisAddIn.Mode = 2;
             //call service
             string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
@@ -93,7 +97,7 @@ namespace Aizenalgo.Word.Addin
                         if (response.MsgType == "Success")
                         {
                             //close the pane.
-
+                            MessageBox.Show("Document Submitted successfully");
                             log.Info("Session verified successfully.Submssion will start.");
                         }
                         else
@@ -122,6 +126,7 @@ namespace Aizenalgo.Word.Addin
                 log.Info("No Docuzen doc found in dictionary.");
             }
             Globals.ThisAddIn.UpdateButtonState();
+            Globals.ThisAddIn.Application.StatusBar = "";
         }
         
         void ShowLoginWindow()

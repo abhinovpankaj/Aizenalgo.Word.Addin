@@ -34,6 +34,7 @@ namespace Aizenalgo.Word.Addin
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             //call service and login
+            Globals.ThisAddIn.Application.StatusBar = "Logging in the user and uploading to Aizenalgo server...";
             int mode = Globals.ThisAddIn.Mode;
             string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
             string tempPath = System.IO.Path.GetTempPath();
@@ -52,11 +53,12 @@ namespace Aizenalgo.Word.Addin
                     //close the pane.
                     
                     Globals.ThisAddIn.IsUserLoggedIn = true;
+                    this.Close();
                     log.Info("Loggedin successfully.");
+                    MessageBox.Show("Document Saved successfully");
                 }
                 else
-                {
-                    
+                {                    
                     Globals.ThisAddIn.IsUserLoggedIn = false;
                     log.Info("Log-in failed.");
                 }
@@ -66,8 +68,8 @@ namespace Aizenalgo.Word.Addin
                 //log
                 log.Info("No Docuzen doc found in dictionary.");
             }
-            Globals.ThisAddIn.UpdateButtonState();
-            this.Close();
+            Globals.ThisAddIn.UpdateButtonState();            
+            Globals.ThisAddIn.Application.StatusBar = "";
         }
     }
 }

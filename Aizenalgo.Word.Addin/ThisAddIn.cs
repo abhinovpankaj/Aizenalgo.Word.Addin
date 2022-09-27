@@ -120,6 +120,7 @@ namespace Aizenalgo.Word.Addin
                     }
                     DocuzenDocList.Add(Doc.Name, docuzendoc);
                     IsActiveDocDocuzen = true;
+                    DocuzenRibbon.Tabs[0].Groups.FirstOrDefault(x => x.Name == "grpDocuzen").Visible = true;
                 }
                 else
                     IsActiveDocDocuzen = false;
