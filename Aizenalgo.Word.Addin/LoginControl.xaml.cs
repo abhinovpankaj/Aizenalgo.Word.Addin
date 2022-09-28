@@ -58,7 +58,8 @@ namespace Aizenalgo.Word.Addin
                     MessageBox.Show("Document Saved successfully");
                 }
                 else
-                {                    
+                {
+                    MessageBox.Show("User not authorized, submission failed.");
                     Globals.ThisAddIn.IsUserLoggedIn = false;
                     log.Info("Log-in failed.");
                 }

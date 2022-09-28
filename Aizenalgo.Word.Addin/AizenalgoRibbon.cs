@@ -46,6 +46,7 @@ namespace Aizenalgo.Word.Addin
                         }
                         else
                         {
+                            Globals.ThisAddIn.Application.StatusBar= "Error from Server "+ response.MsgError;
                             // Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
                             Globals.ThisAddIn.IsUserLoggedIn = false;
                             //Globals.ThisAddIn.ShowLoginWindow();
@@ -57,6 +58,7 @@ namespace Aizenalgo.Word.Addin
                     {
                         //Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
                         //Globals.ThisAddIn.ShowLoginWindow();
+                        Globals.ThisAddIn.Application.StatusBar = "Error from Server: No response recieved. ";
                         Globals.ThisAddIn.IsUserLoggedIn = false;
                         log.Info("Log-in failed.");
                     }
@@ -102,6 +104,7 @@ namespace Aizenalgo.Word.Addin
                         }
                         else
                         {
+                            Globals.ThisAddIn.Application.StatusBar = "Error from Server " + response.MsgError;
                             // Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
                             Globals.ThisAddIn.IsUserLoggedIn = false;
                             //Globals.ThisAddIn.ShowLoginWindow();
@@ -111,6 +114,7 @@ namespace Aizenalgo.Word.Addin
                     }
                     else
                     {
+                        Globals.ThisAddIn.Application.StatusBar = "Error from Server: No response recieved. ";
                         //Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
                         //Globals.ThisAddIn.ShowLoginWindow();
                         Globals.ThisAddIn.IsUserLoggedIn = false;

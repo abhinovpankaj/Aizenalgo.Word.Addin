@@ -11,6 +11,7 @@ using Microsoft.Office.Tools.Ribbon;
 using Microsoft.Office.Interop.Word;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
+using System.IO;
 
 namespace Aizenalgo.Word.Addin
 {
@@ -40,17 +41,31 @@ namespace Aizenalgo.Word.Addin
         public Dictionary<string,DocuzenDocument> DocuzenDocList { get; set; }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+            //configurateLogging();
+            
             Task.Run(() => {
+                
                 log.Info("Docuzen Add-in loading.");
-                Globals.ThisAddIn.Application.DocumentOpen += Application_DocumentOpen;
+                Globals.ThisAddIn.Application.DocumentOpen += Application_DocumentOpen; 
                 
                
                 Globals.ThisAddIn.Application.WindowActivate += Application_WindowActivate;
                 DocuzenDocList = new Dictionary<string, DocuzenDocument>();
                 log.Info("Docuzen Add-in loaded successfully.");
-                UpdateButtonState();
+                //UpdateButtonState();
             } );
            
+
+        }
+
+        private void configurateLogging()
+        {
+            string MyConfigFile = this.GetType().Assembly.ManifestModule.Name + ".config";
+            if (File.Exists(MyConfigFile))
+            {
+                FileInfo fi = new FileInfo(MyConfigFile);
+                log4net.Config.XmlConfigurator.Configure(fi);
+            }
 
         }
 
