@@ -17,6 +17,7 @@ namespace Aizenalgo.Word.Addin
         private void Aizenalgo_Load(object sender, RibbonUIEventArgs e)
         {
             Globals.ThisAddIn.DocuzenRibbon = sender as OfficeRibbon;
+            //Globals.ThisAddIn.Application.DocumentOpen += Globals.ThisAddIn.Application_DocumentOpen;
         }
 
         private async void btnSave_Click(object sender, RibbonControlEventArgs e)

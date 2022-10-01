@@ -42,20 +42,19 @@ namespace Aizenalgo.Word.Addin
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             //configurateLogging();
-            
+           
             Task.Run(() => {
                 
                 log.Info("Docuzen Add-in loading.");
                 Globals.ThisAddIn.Application.DocumentOpen += Application_DocumentOpen; 
-                
-               
+                               
                 Globals.ThisAddIn.Application.WindowActivate += Application_WindowActivate;
                 DocuzenDocList = new Dictionary<string, DocuzenDocument>();
                 log.Info("Docuzen Add-in loaded successfully.");
-                //UpdateButtonState();
+                UpdateButtonState();
             } );
-           
 
+           
         }
 
         private void configurateLogging()
@@ -84,6 +83,7 @@ namespace Aizenalgo.Word.Addin
         }
         private void Application_WindowActivate(Microsoft.Office.Interop.Word.Document Doc, Microsoft.Office.Interop.Word.Window Wn)
         {
+            
             log.Info($"Docuzen Add-in:{Doc.Name} document activated.");
             try
             {
@@ -110,7 +110,7 @@ namespace Aizenalgo.Word.Addin
             }                           
         }
 
-        private void Application_DocumentOpen(Microsoft.Office.Interop.Word.Document Doc)
+        public void Application_DocumentOpen(Microsoft.Office.Interop.Word.Document Doc)
         {
             log.Info($"Docuzen Add-in:{Doc.Name} document opened. Reading for dozuzen doc properties");
             try

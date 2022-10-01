@@ -23,12 +23,16 @@ namespace Aizenalgo.Word.Addin
     {
         private static readonly log4net.ILog log =
                         log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public string ImageURL { get; set; }
         public LoginControl()
         {
             InitializeComponent();
+            this.DataContext = this;
             string activeDocName = Globals.ThisAddIn.Application.ActiveDocument.Name;
             var activeDocuzen = Globals.ThisAddIn.DocuzenDocList[activeDocName];
-            logo.Source =  new BitmapImage(new Uri(activeDocuzen.LogoURL)); 
+            var uri = new Uri(activeDocuzen.LogoURL);
+            var bitmap = new BitmapImage(uri);
+            logo.Source = bitmap;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
