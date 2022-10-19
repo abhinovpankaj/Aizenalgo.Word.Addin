@@ -284,6 +284,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -895,7 +903,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_22DABF4A802D4108A9C088A45E8D1D3F"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -944,7 +952,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Aizenalgo.Word.Addin.Installer"
         "ProductCode" = "8:{045AABAB-628B-4B30-9891-C48CA711FBC8}"
-        "PackageCode" = "8:{3E1A4790-1D84-47C8-8B86-4C55C873CA2D}"
+        "PackageCode" = "8:{D24FF6C4-14CD-49BA-A2ED-6ABDB3E7800E}"
         "UpgradeCode" = "8:{64925189-85B8-4432-B76C-4976E2C0C62E}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -965,7 +973,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"

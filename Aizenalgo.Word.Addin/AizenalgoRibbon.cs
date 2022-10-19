@@ -29,49 +29,57 @@ namespace Aizenalgo.Word.Addin
             string tempPath = System.IO.Path.GetTempPath();
             string fPath = Path.Combine(tempPath, activeDocName);
             File.Copy(Path.Combine(Globals.ThisAddIn.Application.ActiveDocument.Path, activeDocName), fPath, true);
-
-            log.Info("Submit button Clicked");
-            if (activeDocuzen != null)
+            try
             {
-                log.Info("Docuzen doc found.");
-                await Dispatcher.CurrentDispatcher.Invoke(async () =>
+                log.Info("Submit button Clicked");
+                if (activeDocuzen != null)
                 {
-                    ServiceResponse response = await DocuzenService.DocuzenSessionVerification(activeDocuzen.SessionId, activeDocuzen.DocumentId, fPath, activeDocName,1);
-                    if (response != null)
+                    log.Info("Docuzen doc found.");
+                    await Dispatcher.CurrentDispatcher.Invoke(async () =>
                     {
-                        if (response.MsgType == "Success")
+                        ServiceResponse response = await DocuzenService.DocuzenSessionVerification(activeDocuzen.SessionId, activeDocuzen.DocumentId, fPath, activeDocName, 1);
+                        if (response != null)
                         {
-                            //close the pane.
-                            MessageBox.Show("Document Saved successfully");
-                            log.Info("Session verified successfully.Submssion will start.");
+                            if (response.MsgType == "Success")
+                            {
+                                //close the pane.
+                                MessageBox.Show("Document Saved successfully");
+                                log.Info("Session verified successfully.Submssion will start.");
+                            }
+                            else
+                            {
+                                Globals.ThisAddIn.Application.StatusBar = "Error from Server " + response.MsgError;
+                                // Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
+                                Globals.ThisAddIn.IsUserLoggedIn = false;
+                                //Globals.ThisAddIn.ShowLoginWindow();
+
+                                log.Info("Log-in failed.");
+                            }
                         }
                         else
                         {
-                            Globals.ThisAddIn.Application.StatusBar= "Error from Server "+ response.MsgError;
-                            // Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
-                            Globals.ThisAddIn.IsUserLoggedIn = false;
+                            //Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
                             //Globals.ThisAddIn.ShowLoginWindow();
-
+                            Globals.ThisAddIn.Application.StatusBar = "Error from Server: No response recieved. ";
+                            Globals.ThisAddIn.IsUserLoggedIn = false;
                             log.Info("Log-in failed.");
                         }
-                    }
-                    else
-                    {
-                        //Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
-                        //Globals.ThisAddIn.ShowLoginWindow();
-                        Globals.ThisAddIn.Application.StatusBar = "Error from Server: No response recieved. ";
-                        Globals.ThisAddIn.IsUserLoggedIn = false;
-                        log.Info("Log-in failed.");
-                    }
-                });
+                    });
 
 
+                }
+                else
+                {
+                    //log
+                    log.Info("No Docuzen doc found in dictionary.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                //log
-                log.Info("No Docuzen doc found in dictionary.");
+                log.Error("Exception occured while saving document"+ ex.Message);
+                MessageBox.Show("Exception while saving the document.");
             }
+            
             Globals.ThisAddIn.UpdateButtonState();
             Globals.ThisAddIn.Application.StatusBar = "";
         }
@@ -87,49 +95,58 @@ namespace Aizenalgo.Word.Addin
             string tempPath = System.IO.Path.GetTempPath();
             string fPath = Path.Combine(tempPath,activeDocName);
             File.Copy(Path.Combine(Globals.ThisAddIn.Application.ActiveDocument.Path, activeDocName), fPath,true);
-            
-            log.Info("Submit button Clicked");
-            if (activeDocuzen != null)
+            try
             {
-                log.Info("Docuzen doc found.");
-                await Dispatcher.CurrentDispatcher.Invoke(async () =>
+                if (activeDocuzen != null)
                 {
-                    ServiceResponse response = await DocuzenService.DocuzenSessionVerification(activeDocuzen.SessionId, activeDocuzen.DocumentId, fPath, activeDocName,2);
-                    if (response != null)
+                    log.Info("Docuzen doc found.");
+                    await Dispatcher.CurrentDispatcher.Invoke(async () =>
                     {
-                        if (response.MsgType == "Success")
+                        ServiceResponse response = await DocuzenService.DocuzenSessionVerification(activeDocuzen.SessionId, activeDocuzen.DocumentId, fPath, activeDocName, 2);
+                        if (response != null)
                         {
-                            //close the pane.
-                            MessageBox.Show("Document Submitted successfully");
-                            log.Info("Session verified successfully.Submssion will start.");
+                            if (response.MsgType == "Success")
+                            {
+                                //close the pane.
+                                MessageBox.Show("Document Submitted successfully");
+                                log.Info("Session verified successfully.Submssion will start.");
+                            }
+                            else
+                            {
+                                Globals.ThisAddIn.Application.StatusBar = "Error from Server " + response.MsgError;
+                                // Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
+                                Globals.ThisAddIn.IsUserLoggedIn = false;
+                                //Globals.ThisAddIn.ShowLoginWindow();
+
+                                log.Info("Log-in failed.");
+                            }
                         }
                         else
                         {
-                            Globals.ThisAddIn.Application.StatusBar = "Error from Server " + response.MsgError;
-                            // Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
-                            Globals.ThisAddIn.IsUserLoggedIn = false;
+                            Globals.ThisAddIn.Application.StatusBar = "Error from Server: No response recieved. ";
+                            //Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
                             //Globals.ThisAddIn.ShowLoginWindow();
-
+                            Globals.ThisAddIn.IsUserLoggedIn = false;
                             log.Info("Log-in failed.");
                         }
-                    }
-                    else
-                    {
-                        Globals.ThisAddIn.Application.StatusBar = "Error from Server: No response recieved. ";
-                        //Dispatcher.CurrentDispatcher.Invoke(() => ShowLoginWindow());
-                        //Globals.ThisAddIn.ShowLoginWindow();
-                        Globals.ThisAddIn.IsUserLoggedIn = false;
-                        log.Info("Log-in failed.");
-                    }
-                });
-                
-                
+                    });
+
+
+                }
+                else
+                {
+                    //log
+                    log.Info("No Docuzen doc found in dictionary.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                //log
-                log.Info("No Docuzen doc found in dictionary.");
+                log.Error("Exception occured while submitting document" + ex.Message);
+                MessageBox.Show("Exception while submitting the document.");
+                throw;
             }
+            log.Info("Submit button Clicked");
+            
             Globals.ThisAddIn.UpdateButtonState();
             Globals.ThisAddIn.Application.StatusBar = "";
         }
